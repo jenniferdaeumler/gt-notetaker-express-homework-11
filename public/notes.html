@@ -38,16 +38,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="/assets/js/index.js"></script>
   <script>
-    $(document).ready(function () {
-      $(".note-title").on("click", function (event) {
-        event.preventDefault();
-        console.log("Saved");
+    // // <!-- Not sure what to save? and how to click just save button --> 
+    // $(document).ready(function () {
+    //   $("#save").on("click", function (event) {
+    //     event.preventDefault();
+    //     console.log("Saved");
+    //     //IDK about all this --> 
+    //     const title= $("#note-title").val();
+    //     const text= $("#note-textarea").val();
+    //     const id= $("#id").val();
+    //     $.post("/api/notes", {title: title, text: text, id: id}).then((response)=>{
+    //       console.log(response);
+    //       alert("You added a new note.");
+    //     });
+    //   });
 
-      });
 
-
-
-    })
+      //end doc.ready
+    // });
   </script>
 </body>
 

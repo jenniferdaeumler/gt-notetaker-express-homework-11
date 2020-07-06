@@ -30,7 +30,8 @@ app.get("/notes", (req, res) => {
 //GET `/api/notes` - Should read the `db.json` file and return all saved notes as JSON.
 //Connect db.json file to server.js file
 //Do I need word "return"??
-//Do I need fs read file here to read data?
+
+//why do I have this -->
 const db = require("./db/db.json");
 app.get("/api/notes", function (req, res) {
     fs.readFile("./db/db.json", "utf8", (err, data) => {
@@ -50,7 +51,8 @@ app.post("/api/notes", (req, res) => {
             return res.send("An error occured reading your data");
         }
         const arrayOfNotes = JSON.parse(data);
-        arrayOfNotes.push(req.body);
+        const note = {...req.body, id:arrayOfNotes.length}
+        arrayOfNotes.push(note);
         fs.writeFile(
             "./db/db.json",
             JSON.stringify(arrayOfNotes),
