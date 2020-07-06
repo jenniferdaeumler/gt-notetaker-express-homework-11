@@ -9,12 +9,15 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//Serving static files in Express (from documentation)
+app.use(express.static('public'));
+
 //View / HTML routes 
 // * GET `/notes` - Should return the `notes.html` file.
 // * GET `*` - Should return the `index.html` file
-app.get("/", (req,res) => {
-    res.send("Hello world");
-})
+app.get("/notes", (req,res) => {
+    return res.sendFile(path.join(__dirname, "./public/notes.html"));
+});
 
 
 //API / JSON routes
