@@ -17,23 +17,20 @@ app.use(express.json());
 app.use(express.static("public"));
 
 //View / HTML routes
-// * GET `*` - Should return the `index.html` file I DON'T HAVE THIS
+//Get route, homepage HTML sent
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 });
-// * GET `/notes` - Should return the `notes.html` file.
+//Get route, notes HTML sent
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
 
-//API / JSON routes
-//GET `/api/notes` - Should read the `db.json` file and return all saved notes as JSON.
-//Connect db.json file to server.js file
-//Do I need word "return"??
 
-//why do I have this -->
-// const db = require("./db/db.json");
+//API / JSON routes
+//Get route
 app.get("/api/notes", function (req, res) {
+    //Reading the note object array
     fs.readFile("./db/db.json", "utf8", (err, data) => {
         if (err) {
             return res.send("An error occured reading your data");
@@ -43,16 +40,19 @@ app.get("/api/notes", function (req, res) {
     });
 });
 
-// //POST `/api/notes` - Should receive a new note to save on the request body,
-// add it to the `db.json` file, and then return the new note to the client.
+//Post route
 app.post("/api/notes", (req, res) => {
+    //Reading the note object array
     fs.readFile("./db/db.json", "utf8", (err, data) => {
         if (err) {
             return res.send("An error occured reading your data");
         }
         const arrayOfNotes = JSON.parse(data);
+        //Spreading ID key into note object array
         const note = { ...req.body, id: arrayOfNotes.length }
+        //ID gets pushed into array
         arrayOfNotes.push(note);
+        //Write file, stringifying it, new note appears in db.json file w/ id
         fs.writeFile(
             "./db/db.json",
             JSON.stringify(arrayOfNotes),
@@ -66,24 +66,19 @@ app.post("/api/notes", (req, res) => {
         )
     })
 });
-//DELETE `/api/notes/:id` - Should receive a query parameter containing the id of a note to delete.
-// This means you'll need to find a way to give each note a unique `id` when it's saved. In order to delete a note,
-// you'll need to read all notes from the `db.json` file, remove the note with the given `id` property, and then
-// rewrite the notes to the `db.json` file.
+//Delete Route
 app.delete("/api/notes/:id", function (req, res) {
-    // res.send("Delete request for note");
+    //Reading the note object array
     fs.readFile("./db/db.json", "utf8", (err, data) => {
         if (err) {
             return res.send("An error occured reading your data");
         }
         const arrayOfNotes = JSON.parse(data);
-        console.log(arrayOfNotes);
-        // filter data 
+        //Filter through the data, if id does not match selected one, then gets pushed into new notes array
         const deletedNote = arrayOfNotes.filter(function (note) {
             return note.id != req.params.id;
-        })  
-        console.log(deletedNote);
-        // write to db
+        })
+        //Write file, stringifying it, new note appears in db.json file
         fs.writeFile(
             "./db/db.json",
             JSON.stringify(deletedNote),
@@ -95,9 +90,14 @@ app.delete("/api/notes/:id", function (req, res) {
                 res.json(deletedNote);
             }
         )
-    })});
+    })
+});
 
-    //Listen on that port
-    app.listen(PORT, (req, res) => {
-        console.log(`Currently running on http://localhost:${PORT}`);
-    });
+//Catch all for user URL input
+app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "public/index.html"));
+  });
+//Listen on that port
+app.listen(PORT, (req, res) => {
+    console.log(`Currently running on http://localhost:${PORT}`);
+});
