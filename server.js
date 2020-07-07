@@ -30,8 +30,9 @@ app.get("/notes", (req, res) => {
 //GET `/api/notes` - Should read the `db.json` file and return all saved notes as JSON.
 //Connect db.json file to server.js file
 //Do I need word "return"??
-//Do I need fs read file here to read data?
-const db = require("./db/db.json");
+
+//why do I have this -->
+// const db = require("./db/db.json");
 app.get("/api/notes", function (req, res) {
     fs.readFile("./db/db.json", "utf8", (err, data) => {
         if (err) {
@@ -50,7 +51,8 @@ app.post("/api/notes", (req, res) => {
             return res.send("An error occured reading your data");
         }
         const arrayOfNotes = JSON.parse(data);
-        arrayOfNotes.push(req.body);
+        const note = { ...req.body, id: arrayOfNotes.length }
+        arrayOfNotes.push(note);
         fs.writeFile(
             "./db/db.json",
             JSON.stringify(arrayOfNotes),
@@ -69,13 +71,33 @@ app.post("/api/notes", (req, res) => {
 // you'll need to read all notes from the `db.json` file, remove the note with the given `id` property, and then
 // rewrite the notes to the `db.json` file.
 app.delete("/api/notes/:id", function (req, res) {
-    res.send("Delete request for note");
-    console.log("Deleted");
-});
+    // res.send("Delete request for note");
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
+        if (err) {
+            return res.send("An error occured reading your data");
+        }
+        const arrayOfNotes = JSON.parse(data);
+        console.log(arrayOfNotes);
+        // filter data 
+        const deletedNote = arrayOfNotes.filter(function (note) {
+            return note.id != req.params.id;
+        })  
+        console.log(deletedNote);
+        // write to db
+        fs.writeFile(
+            "./db/db.json",
+            JSON.stringify(deletedNote),
+            "utf8",
+            (err) => {
+                if (err) {
+                    return res.send("An error occured writing your data");
+                }
+                res.json(deletedNote);
+            }
+        )
+    })});
 
-//FS for the db.json file
-
-//Listen on that port
-app.listen(PORT, (req, res) => {
-    console.log(`Currently running on http://localhost:${PORT}`);
-});
+    //Listen on that port
+    app.listen(PORT, (req, res) => {
+        console.log(`Currently running on http://localhost:${PORT}`);
+    });
