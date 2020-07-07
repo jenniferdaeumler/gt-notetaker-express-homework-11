@@ -32,7 +32,7 @@ app.get("/notes", (req, res) => {
 //Do I need word "return"??
 
 //why do I have this -->
-const db = require("./db/db.json");
+// const db = require("./db/db.json");
 app.get("/api/notes", function (req, res) {
     fs.readFile("./db/db.json", "utf8", (err, data) => {
         if (err) {
@@ -96,8 +96,6 @@ app.delete("/api/notes/:id", function (req, res) {
             }
         )
     })});
-
-    //FS for the db.json file
 
     //Listen on that port
     app.listen(PORT, (req, res) => {
