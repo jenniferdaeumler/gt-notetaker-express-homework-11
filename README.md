@@ -1,5 +1,5 @@
 # Express Homework: Note Taker
-[Link to Deployed site via Heroku] (https://git.heroku.com/salty-river-59997.git
+[Link to Deployed site via Heroku] (https://salty-river-59997.herokuapp.com/
 )
 
 [Link to GitHub Repo] (https://github.com/jenniferdaeumler/gt-notetaker-express-homework-11)
